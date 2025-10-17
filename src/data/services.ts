@@ -96,5 +96,21 @@ export const services: Service[] = [
       'Coordination with venue',
       'Special dietary accommodations'
     ]
+  },
+  {
+    id: '7',
+    name: 'Braai Stand Add-On',
+    description: 'R299 for 2 sessions! You bring the coal & meat, we\'ll take care of the braai. Available only when you book one of our Spitbraai services.',
+    basePrice: 299,
+    image: '/braaistand.jpg',
+    category: 'addon',
+    servings: '2 sessions',
+    includes: [
+      'Professional braai stand',
+      '2 cooking sessions',
+      'We handle the grilling',
+      'You provide coal and meat',
+      'Must book with Spitbraai service'
+    ]
   }
 ];

@@ -55,24 +55,30 @@ export const ImageLightbox: React.FC<ImageLightboxProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 bg-black/95 z-[100] flex items-center justify-center">
+      {/* Background Click to Close */}
+      <div
+        className="absolute inset-0 z-0"
+        onClick={onClose}
+      />
+
       {/* Close Button */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 z-60 w-12 h-12 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center transition-all duration-200 text-white"
+        className="absolute top-4 right-4 z-10 w-12 h-12 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center transition-all duration-200 text-white"
       >
         <X className="h-6 w-6" />
       </button>
 
       {/* Image Counter */}
-      <div className="absolute top-4 left-4 z-60 bg-black/50 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-medium">
+      <div className="absolute top-4 left-4 z-10 bg-black/50 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-medium">
         {currentIndex + 1} / {images.length}
       </div>
 
       {/* Previous Button */}
       <button
         onClick={onPrevious}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-60 w-12 h-12 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center transition-all duration-200 text-white"
+        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center transition-all duration-200 text-white"
       >
         <ChevronLeft className="h-6 w-6" />
       </button>
@@ -80,13 +86,13 @@ export const ImageLightbox: React.FC<ImageLightboxProps> = ({
       {/* Next Button */}
       <button
         onClick={onNext}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-60 w-12 h-12 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center transition-all duration-200 text-white"
+        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center transition-all duration-200 text-white"
       >
         <ChevronRight className="h-6 w-6" />
       </button>
 
       {/* Main Image */}
-      <div className="relative w-full h-full flex items-center justify-center p-4 sm:p-8">
+      <div className="relative w-full h-full flex items-center justify-center p-4 sm:p-8 z-[1]">
         <img
           src={images[currentIndex]}
           alt={`Gallery image ${currentIndex + 1}`}
@@ -98,12 +104,11 @@ export const ImageLightbox: React.FC<ImageLightboxProps> = ({
       </div>
 
       {/* Thumbnail Strip (Desktop) */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 hidden sm:flex space-x-2 bg-black/30 backdrop-blur-sm rounded-full p-2">
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 hidden sm:flex space-x-2 bg-black/30 backdrop-blur-sm rounded-full p-2 z-10">
         {images.map((image, index) => (
           <button
             key={index}
             onClick={() => {
-              // This would need to be handled by parent component
               const diff = index - currentIndex;
               if (diff > 0) {
                 for (let i = 0; i < diff; i++) onNext();
@@ -112,8 +117,8 @@ export const ImageLightbox: React.FC<ImageLightboxProps> = ({
               }
             }}
             className={`w-16 h-12 rounded-lg overflow-hidden transition-all duration-200 ${
-              index === currentIndex 
-                ? 'ring-2 ring-orange-400 opacity-100' 
+              index === currentIndex
+                ? 'ring-2 ring-orange-400 opacity-100'
                 : 'opacity-60 hover:opacity-80'
             }`}
           >
@@ -130,7 +135,7 @@ export const ImageLightbox: React.FC<ImageLightboxProps> = ({
       </div>
 
       {/* Mobile Swipe Indicators */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2 sm:hidden">
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2 sm:hidden z-10">
         {images.map((_, index) => (
           <div
             key={index}
@@ -140,12 +145,6 @@ export const ImageLightbox: React.FC<ImageLightboxProps> = ({
           />
         ))}
       </div>
-
-      {/* Background Click to Close */}
-      <div 
-        className="absolute inset-0 -z-10"
-        onClick={onClose}
-      />
     </div>
   );
 };

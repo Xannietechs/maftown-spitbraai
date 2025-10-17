@@ -478,6 +478,20 @@ function App() {
                 </div>
               </div>
             </div>
+
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+              <div className="flex items-start space-x-3">
+                <div className="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <span className="text-white text-xs font-bold">✓</span>
+                </div>
+                <div>
+                  <h4 className="font-bold text-green-900 mb-2">Delivery Information</h4>
+                  <p className="text-green-800 text-sm">
+                    We offer <strong>FREE delivery within a 15km radius</strong> from our location! Anything beyond that? Don't worry, we've got you covered, with delivery starting from just <strong>R150</strong>.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Service Cards */}

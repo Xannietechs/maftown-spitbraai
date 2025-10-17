@@ -4,7 +4,10 @@ import { services } from './data/services';
 import { ServiceCard } from './components/ServiceCard';
 import { ServiceModal } from './components/ServiceModal';
 import { Chatbot } from './components/Chatbot';
+import { ImageLightbox } from './components/ImageLightbox';
 import { Service, SpitbraaiType } from './types';
+import { MessageCircle } from "lucide-react"; // add this im
+import { FaWhatsapp } from "react-icons/fa"; // import WhatsApp icon
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -12,12 +15,16 @@ function App() {
   const [isServiceModalOpen, setIsServiceModalOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [selectedSpitbraaiType, setSelectedSpitbraaiType] = useState<SpitbraaiType>('charcoal');
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
     email: '',
     message: ''
   });
+
+  const galleryImages = ['/1.jpg', '/2.jpg', '/3.jpg', '/4.jpg', '/5.jpg', '/6.jpg'];
 
   // Handle scroll to show/hide scroll-to-top button
   React.useEffect(() => {
@@ -84,6 +91,23 @@ function App() {
       element.scrollIntoView({ behavior: 'smooth' });
     }
     setIsMenuOpen(false);
+  };
+
+  const openLightbox = (index: number) => {
+    setCurrentImageIndex(index);
+    setLightboxOpen(true);
+  };
+
+  const closeLightbox = () => {
+    setLightboxOpen(false);
+  };
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % galleryImages.length);
+  };
+
+  const previousImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + galleryImages.length) % galleryImages.length);
   };
 
   return (
@@ -309,28 +333,28 @@ function App() {
           <div className="mb-12">
             <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Choose Your Spitbraai Type</h3>
             <div className="flex justify-center mb-8">
-              <div className="bg-gray-100 p-2 rounded-lg flex space-x-2">
+              <div className="bg-gray-100 p-1 rounded-xl flex space-x-1 w-fit">
                 <button
                   onClick={() => setSelectedSpitbraaiType('charcoal')}
-                  className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-semibold transition-colors ${
+                  className={`flex items-center justify-center space-x-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 text-sm ${
                     selectedSpitbraaiType === 'charcoal'
-                      ? 'bg-orange-600 text-white'
-                      : 'text-gray-700 hover:bg-gray-200'
+                      ? 'bg-orange-600 text-white shadow-md'
+                      : 'text-gray-700 hover:bg-gray-200/50'
                   }`}
                 >
                   <Flame className="h-5 w-5" />
-                  <span>Charcoal/Firewood</span>
+                  <span>Charcoal</span>
                 </button>
                 <button
                   onClick={() => setSelectedSpitbraaiType('gas')}
-                  className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-semibold transition-colors ${
+                  className={`flex items-center justify-center space-x-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 text-sm ${
                     selectedSpitbraaiType === 'gas'
-                      ? 'bg-orange-600 text-white'
-                      : 'text-gray-700 hover:bg-gray-200'
+                      ? 'bg-orange-600 text-white shadow-md'
+                      : 'text-gray-700 hover:bg-gray-200/50'
                   }`}
                 >
                   <Zap className="h-5 w-5" />
-                  <span>Gas Spitbraai</span>
+                  <span>Gas</span>
                 </button>
               </div>
             </div>
@@ -348,30 +372,42 @@ function App() {
       <div className="w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center">
         <Flame className="h-5 w-5 text-white" />
       </div>
-      <h4 className="text-xl font-bold text-gray-900">Charcoal/Firewood Spitbraai</h4>
+      <h4 className="text-lg sm:text-xl font-bold text-gray-900">Charcoal/Firewood Spitbraai</h4>
     </div>
     <p className="text-gray-700 mb-4">
       Traditional authentic flavor with charcoal or firewood. Perfect for that authentic South African braai
       experience with smoky, rich flavors.
     </p>
     <div className="space-y-3">
-      <div className="flex justify-between items-center py-2 border-b border-gray-200">
-        <span className="text-gray-700">Equipment Hire Only</span>
-        <span className="font-bold text-orange-600">R800</span>
-      </div>
-      <div className="flex justify-between items-center py-2 border-b border-gray-200">
-        <span className="text-gray-700">With Professional Chef</span>
-        <span className="font-bold text-orange-600">R1,300</span>
-      </div>
-      <div className="flex justify-between items-center py-2 border-b border-gray-200">
-        <span className="text-gray-700">Full Package: Lamb</span>
-        <span className="font-bold text-orange-600">R5,500</span>
-      </div>
-      <div className="flex justify-between items-center py-2">
-        <span className="text-gray-700">Full Package: Pork</span>
-        <span className="font-bold text-orange-600">R4,700</span>
-      </div>
-    </div>
+  <div className="flex justify-between items-center py-2 border-b border-gray-200">
+    <span className="text-gray-700 text-sm sm:text-base">Equipment Hire Only</span>
+    <span className="font-bold text-orange-600">R800</span>
+  </div>
+  <div className="flex justify-between items-center py-2 border-b border-gray-200">
+    <span className="text-gray-700 text-sm sm:text-base">With Professional Chef</span>
+    <span className="font-bold text-orange-600">R1,300</span>
+  </div>
+  <div className="flex justify-between items-start py-2 border-b border-gray-200">
+    <span className="text-gray-700 text-sm sm:text-base">
+      Full Package: Pork
+      <span className="block text-xs text-gray-500">
+        Includes carcass, setup, clean up, chef, and roasted veggies (50% deposit required)
+      </span>
+    </span>
+    <span className="font-bold text-orange-600">R4,700</span>
+  </div>
+  <div className="flex justify-between items-start py-2">
+    <span className="text-gray-700 text-sm sm:text-base">
+      Full Package: Lamb
+      <span className="block text-xs text-gray-500">
+        Includes carcass, setup, clean up, chef, and roasted veggies (50% deposit required)
+      </span>
+    </span>
+    <span className="font-bold text-orange-600">R5,500</span>
+  </div>
+</div>
+
+
   </div>
 
   {/* Gas Spitbraai Pricing */}
@@ -386,30 +422,43 @@ function App() {
       <div className="w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center">
         <Zap className="h-5 w-5 text-white" />
       </div>
-      <h4 className="text-xl font-bold text-gray-900">Gas Spitbraai</h4>
+      <h4 className="text-lg sm:text-xl font-bold text-gray-900">Gas Spitbraai</h4>
     </div>
     <p className="text-gray-700 mb-4">
       Clean, convenient cooking with consistent heat control. Ideal for venues with restrictions or when you
       need precise temperature management.
     </p>
     <div className="space-y-3">
-      <div className="flex justify-between items-center py-2 border-b border-gray-200">
-        <span className="text-gray-700">Equipment Hire Only</span>
-        <span className="font-bold text-orange-600">R1,200</span>
-      </div>
-      <div className="flex justify-between items-center py-2 border-b border-gray-200">
-        <span className="text-gray-700">With Professional Chef</span>
-        <span className="font-bold text-orange-600">R1,700</span>
-      </div>
-      <div className="flex justify-between items-center py-2 border-b border-gray-200">
-        <span className="text-gray-700">Full Package: Lamb</span>
-        <span className="font-bold text-orange-600">R5,800</span>
-      </div>
-      <div className="flex justify-between items-center py-2">
-        <span className="text-gray-700">Full Package: Pork</span>
-        <span className="font-bold text-orange-600">R5,000</span>
-      </div>
-    </div>
+  <div className="flex justify-between items-center py-2 border-b border-gray-200">
+    <span className="text-gray-700 text-sm sm:text-base">Equipment Hire Only</span>
+    <span className="font-bold text-orange-600">R1,200</span>
+  </div>
+  <div className="flex justify-between items-center py-2 border-b border-gray-200">
+    <span className="text-gray-700 text-sm sm:text-base">With Professional Chef</span>
+    <span className="font-bold text-orange-600">R1,700</span>
+  </div>
+  <div className="flex justify-between items-start py-2 border-b border-gray-200">
+    <span className="text-gray-700 text-sm sm:text-base">
+      Full Package: Pork
+      <span className="block text-xs text-gray-500">
+        Includes carcass, setup, clean up, chef, and roasted veggies (50% deposit required)
+      </span>
+    </span>
+    <span className="font-bold text-orange-600">R5,000</span>
+  </div>
+  <div className="flex justify-between items-start py-2">
+    <span className="text-gray-700 text-sm sm:text-base">
+      Full Package: Lamb
+      <span className="block text-xs text-gray-500">
+        Includes carcass, setup, clean up, chef, and roasted veggies (50% deposit required)
+      </span>
+    </span>
+    <span className="font-bold text-orange-600">R5,800</span>
+  </div>
+</div>
+
+
+
   </div>
 </div>
 
@@ -424,7 +473,7 @@ function App() {
                   <p className="text-blue-800 text-sm">
                     <strong>Equipment Hire:</strong> Spitbraai equipment rental for self-service cooking.<br/>
                     <strong>With Chef:</strong> Professional chef handles all cooking and service.<br/>
-                    <strong>Full Catering:</strong> Complete catering service with sides, setup, and cleanup.
+                    <strong>Full Catering:</strong> Complete catering service with carcass, setup, clean up, chef, and roasted veggies (50% deposit required).
                   </p>
                 </div>
               </div>
@@ -459,34 +508,29 @@ function App() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <div className="relative overflow-hidden rounded-lg shadow-lg group">
-              <img 
-                src="/1.jpg"
-                alt="Professional spitbraai service"
-                className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-300"
-                onError={(e) => {
-                  e.currentTarget.src = 'https://images.pexels.com/photos/1731427/pexels-photo-1731427.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop';
-                }}
-              />
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                <p className="text-white font-semibold text-lg">Professional Service</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            {galleryImages.map((image, index) => (
+              <div 
+                key={index}
+                className="relative overflow-hidden rounded-lg shadow-lg group cursor-pointer"
+                onClick={() => openLightbox(index)}
+              >
+                <img 
+                  src={image}
+                  alt={`Spitbraai service ${index + 1}`}
+                  className="w-full h-64 sm:h-72 object-cover group-hover:scale-110 transition-transform duration-300"
+                  onError={(e) => {
+                    e.currentTarget.src = `https://images.pexels.com/photos/${1731427 + index}/pexels-photo-${1731427 + index}.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop`;
+                  }}
+                />
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <p className="text-white font-semibold text-lg">View Image</p>
+                </div>
+                <div className="absolute top-2 right-2 bg-black/50 text-white px-2 py-1 rounded-full text-xs font-medium">
+                  {index + 1}/6
+                </div>
               </div>
-            </div>
-
-            <div className="relative overflow-hidden rounded-lg shadow-lg group">
-              <img 
-                src="/2.jpg"
-                alt="Event catering setup"
-                className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-300"
-                onError={(e) => {
-                  e.currentTarget.src = 'https://images.pexels.com/photos/2313686/pexels-photo-2313686.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop';
-                }}
-              />
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                <p className="text-white font-semibold text-lg">Event Catering</p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -685,80 +729,96 @@ function App() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div>
-              <div className="mb-4">
-                <img 
-                  src="/logo.png" 
-                  alt="Maftown Spitbraai Logo" 
-                  className="h-12 w-auto"
-                  onError={(e) => {
-                    // Fallback to text if logo doesn't exist
-                    e.currentTarget.style.display = 'none';
-                    e.currentTarget.nextElementSibling?.classList.remove('hidden');
-                  }}
-                />
-                <div className="flex items-center space-x-2 hidden">
-                  <ChefHat className="h-8 w-8 text-orange-600" />
-                  <span className="font-bold text-xl">Maftown Spitbraai</span>
-                </div>
-              </div>
-              <p className="text-gray-400 mb-6 leading-relaxed">
-                Professional spitbraai services and equipment hire for authentic South African braai experiences in Mafikeng and surrounding areas.
-              </p>
-              <div className="flex space-x-4">
-                <a 
-                  href="https://facebook.com/MaftownSpitbraai"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 bg-orange-600 hover:bg-orange-700 rounded-full flex items-center justify-center transition-colors"
-                >
-                  <Facebook className="h-5 w-5" />
-                </a>
-              </div>
-            </div>
-
-            <div>
-              <h4 className="font-bold text-lg mb-4">Contact Info</h4>
-              <div className="space-y-3">
-                <div className="flex items-center space-x-3">
-                  <Phone className="h-5 w-5 text-orange-600" />
-                  <a 
-                    href="tel:+27833035688"
-                    className="text-gray-400 hover:text-white transition-colors"
-                  >
-                    +27 83 303 5688
-                  </a>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <MapPin className="h-5 w-5 text-orange-600" />
-                  <span className="text-gray-400">Mafikeng, North West, South Africa</span>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h4 className="font-bold text-lg mb-4">Services</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li>• Spitbraai Equipment Hire</li>
-                <li>• Professional Chef Services</li>
-                <li>• Event Catering</li>
-                <li>• Wedding Services</li>
-                <li>• Corporate Events</li>
-                <li>• Private Functions</li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-gray-700 mt-8 pt-8 text-center">
-            <p className="text-gray-400">
-              © 2025 Maftown Spitbraai. All rights reserved. | Professional Spitbraai Services in Mafikeng, North West
-            </p>
+<footer className="bg-gray-800 text-white py-12">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div>
+        <div className="mb-4">
+          <img 
+            src="/logo.png" 
+            alt="Maftown Spitbraai Logo" 
+            className="h-12 w-auto"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+              e.currentTarget.nextElementSibling?.classList.remove('hidden');
+            }}
+          />
+          <div className="flex items-center space-x-2 hidden">
+            <ChefHat className="h-8 w-8 text-orange-600" />
+            <span className="font-bold text-xl">Maftown Spitbraai</span>
           </div>
         </div>
-      </footer>
+        <p className="text-gray-400 mb-6 leading-relaxed">
+          Professional spitbraai services and equipment hire for authentic South African braai experiences in Mafikeng and surrounding areas.
+        </p>
+        <div className="flex space-x-4">
+          <a 
+            href="https://web.facebook.com/profile.php?id=61578243273112"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-10 h-10 bg-orange-600 hover:bg-orange-700 rounded-full flex items-center justify-center transition-colors"
+          >
+            <Facebook className="h-5 w-5" />
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <h4 className="font-bold text-lg mb-4">Contact Info</h4>
+        <div className="space-y-3">
+          <div className="flex items-center space-x-3">
+            <Phone className="h-5 w-5 text-orange-600" />
+            <a 
+              href="tel:+27833035688"
+              className="text-gray-400 hover:text-white transition-colors"
+            >
+              +27 83 303 5688
+            </a>
+          </div>
+          <div className="flex items-center space-x-3">
+            <MapPin className="h-5 w-5 text-orange-600" />
+            <span className="text-gray-400">Mafikeng, North West, South Africa</span>
+          </div>
+          <div className="flex items-center space-x-3">
+            <Mail className="h-5 w-5 text-orange-600" />
+            <a 
+              href="mailto:hello@maftownspitbraai.com"
+              className="text-gray-400 hover:text-white transition-colors"
+            >
+              hello@maftownspitbraai.com
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h4 className="font-bold text-lg mb-4">Services</h4>
+        <ul className="space-y-2 text-gray-400">
+          <li>• Spitbraai Equipment Hire</li>
+          <li>• Professional Chef Services</li>
+          <li>• Event Catering</li>
+          <li>• Wedding Services</li>
+          <li>• Corporate Events</li>
+          <li>• Private Functions</li>
+        </ul>
+      </div>
+    </div>
+
+    <div className="border-t border-gray-700 mt-8 pt-8 text-center">
+      <p className="text-gray-400">
+        © 2025 Maftown Spitbraai. All rights reserved. | Professional Spitbraai Services in Mafikeng, North West
+      </p>
+    </div>
+  </div>
+</footer>
+<a
+        href="https://wa.me/27833035688?text=Hi%20Maftown%20Spitbraai%2C%20I'd%20like%20to%20inquire%20about%20your%20services."
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-20 right-6 bg-green-500 hover:bg-green-600 text-white p-2 rounded-full shadow-lg transition-transform transform hover:scale-110 z-50"
+      >
+        <FaWhatsapp className="h-8 w-8" />
+      </a>
 
       {/* Scroll to Top Button */}
       {showScrollTop && (
@@ -776,6 +836,16 @@ function App() {
         isOpen={isServiceModalOpen}
         onClose={() => setIsServiceModalOpen(false)}
         spitbraaiType={selectedSpitbraaiType}
+      />
+
+      {/* Image Lightbox */}
+      <ImageLightbox
+        images={galleryImages}
+        currentIndex={currentImageIndex}
+        isOpen={lightboxOpen}
+        onClose={closeLightbox}
+        onNext={nextImage}
+        onPrevious={previousImage}
       />
 
       {/* Chatbot */}
